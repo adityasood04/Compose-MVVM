@@ -64,10 +64,14 @@ dependencies {
     implementation (libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.runtime.livedata)
 
+
     //hilt
-    implementation (libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+
+    // navigation
+    implementation (libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
 
     //retrofit
     implementation(libs.retrofit)
