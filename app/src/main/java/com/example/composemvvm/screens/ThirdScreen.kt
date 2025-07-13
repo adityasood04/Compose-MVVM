@@ -1,29 +1,59 @@
 package com.example.composemvvm.screens
 
-import android.util.Log
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.composemvvm.viewmodels.ThirdScreenViewModel
 
 /**
- * Third Screen Composable
+ * ThirdScreen
  *
- * This screen demonstrates how to access ViewModel and retrieve arguments using SavedStateHandle,
- * following best practices using MVVM architecture and Hilt for dependency injection.
- *
- * @param navController NavHostController to allow navigation between screens.
+ * This screen demonstrates how to:
+ * - Access navigation arguments using ViewModel and SavedStateHandle
+ * - Insert and display data from Room DB using Flow
  */
-
 @Composable
 fun ThirdScreen(navController: NavHostController) {
 
-    // ViewModel injected using Hilt. No need to pass arguments manually.
     val viewModel: ThirdScreenViewModel = hiltViewModel()
+    val items by viewModel.items.collectAsState()
 
-    // Access the argument from ViewModel (which uses SavedStateHandle internally)
-    Log.d("Aditya", "Argument = ${viewModel.argument}")
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // Display the argument passed from previous screen (e.g. "argumentKey")
+        Text("Received argument: ${viewModel.argument ?: "none"}")
 
-    // TODO: Replace with actual UI implementation
-    // This is a placeholder for screen UI that will eventually use the ViewModel data
+        Spacer(modifier = Modifier.height(16.dp))
+
+        /**
+        - Dummy code for Room DB usage.
+        - Button to insert a dummy record into Room DB
+
+        Button(onClick = { viewModel.insertDummyItem() }) {
+            Text("Insert Dummy Item")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        - Display data fetched from Room DB
+        - This is just a dummy code. You guys can update this with your logics
+
+        Text("Room Data:", style = MaterialTheme.typography.titleMedium)
+        LazyColumn {
+            items(items) { item ->
+                Text("• ${item.name}: ${item.description}")
+            }
+        }
+         *
+         */
+    }
 }

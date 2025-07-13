@@ -2,27 +2,38 @@ package com.example.composemvvm.viewmodels
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.composemvvm.data.local.entities.ItemEntity
+import com.example.composemvvm.repository.RoomRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * ThirdScreenViewModel
- *
- * ViewModel for the ThirdScreen composable.
- * It uses SavedStateHandle to retrieve navigation arguments passed from the previous screen.
- *
- * This follows the MVVM pattern and uses Hilt for dependency injection.
- *
- * @param savedStateHandle Used to safely access the navigation arguments.
+ * ViewModel for ThirdScreen: handles Room operations.
  */
 @HiltViewModel
 class ThirdScreenViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val roomRepository: RoomRepository
 ) : ViewModel() {
 
-    /**
-     * Argument passed from previous screen via navigation.
-     * Replace "argumentKey" with the actual key used in your NavGraph route (e.g., "third_screen/{argumentKey}").
-     */
-    val argument: String? = savedStateHandle.get<String>("argumentKey")
+    val argument: String? = savedStateHandle["argumentKey"]
+
+    // Observe Room data
+    val items = roomRepository.getAllItems()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+
+    fun insertDummyItem() {
+        viewModelScope.launch {
+            roomRepository.insertItem(
+                ItemEntity(
+                    name = "Room Title",
+                    description = "Room Desc for $argument"
+                )
+            )
+        }
+    }
 }
