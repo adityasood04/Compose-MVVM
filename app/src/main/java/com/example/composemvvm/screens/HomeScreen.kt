@@ -19,8 +19,9 @@ import com.example.composemvvm.viewmodels.HomeViewModel
 @Composable
 fun HomeScreen(navController: NavHostController) {
     val viewModel: HomeViewModel = hiltViewModel()
-    val state = viewModel.data.collectAsState()
 
+    // This is a demo code. Guys please update this with your respective logics here ---------------------------
+    val state = viewModel.data.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     // Show snackbar when there's an error
